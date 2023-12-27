@@ -2,7 +2,7 @@
 
 import * as cheerio from "cheerio";
 import axios from "axios";
-import { extractCurrency, extractPrice } from "../utils";
+import { extractCurrency, extractDescription, extractPrice } from "../utils";
 
 export async function scrapAmazonProduct(url: string) {
   if (!url) return;
@@ -65,20 +65,34 @@ export async function scrapAmazonProduct(url: string) {
 
     // currency
     const currency = extractCurrency($(".a-price-symbol"));
-    const discountRate = $(".savingsPercentage").text().trim().slice(0,3);
+    const discountRate = $(".savingsPercentage").text().trim().slice(0, 3);
     // remove % sign
     // replace(/[-%]/g, "")
 
-    // rating 
-    const rating = $(".a-size-base.a-color-base span");
+    // description
+    const description = extractDescription($);
 
-    console.log(title);
-    console.log("price:", currency,currentPrice);
-    console.log("original price:", currency,originalPrice);
-    console.log("inStock:", !outOfStock);
-    console.log(imageUrls);
-    console.log("discountRate:", discountRate,"%");
-    // console.log("rating:", rating);
+    // rating
+    const rating = $("span.a-size-base.a-color-base");
+
+    // construct data object with scraped info
+    const data = {
+      title,
+      currentPrice: Number(currentPrice) || Number(originalPrice),
+      originalPrice: Number(originalPrice) || Number(currentPrice),
+      outOfStock,
+      image: imageUrls,
+      discountRate,
+      category: "category",
+      priceHistory: [],
+      currency: currency || "$",
+      isOutOfStock: outOfStock,
+      description: description,
+      lowerPrice: Number(currentPrice) || Number(originalPrice),
+      highestPrice: Number(originalPrice) || Number(currentPrice),
+      averagePrice: Number(currentPrice) || Number(originalPrice),
+    };
+    return data;
   } catch (error: any) {
     throw new Error("Failed to create/Update product: " + error.message);
   }
