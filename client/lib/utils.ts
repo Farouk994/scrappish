@@ -1,5 +1,7 @@
 /** @format */
 
+import { PriceHistoryItem, Product } from "@/types";
+
 export function extractPrice(...elements: any) {
   for (const element of elements) {
     const priceText = element.text().trim();
@@ -79,24 +81,24 @@ export function getAveragePrice(priceList: PriceHistoryItem[]) {
   return averagePrice;
 }
 
-export const getEmailNotifType = (
-  scrapedProduct: Product,
-  currentProduct: Product
-) => {
-  const lowestPrice = getLowestPrice(currentProduct.priceHistory);
+// export const getEmailNotifType = (
+//   scrapedProduct: Product,
+//   currentProduct: Product
+// ) => {
+//   const lowestPrice = getLowestPrice(currentProduct.priceHistory);
 
-  if (scrapedProduct.currentPrice < lowestPrice) {
-    return Notification.LOWEST_PRICE as keyof typeof Notification;
-  }
-  if (!scrapedProduct.isOutOfStock && currentProduct.isOutOfStock) {
-    return Notification.CHANGE_OF_STOCK as keyof typeof Notification;
-  }
-  if (scrapedProduct.discountRate >= THRESHOLD_PERCENTAGE) {
-    return Notification.THRESHOLD_MET as keyof typeof Notification;
-  }
+//   if (scrapedProduct.currentPrice < lowestPrice) {
+//     return Notification.LOWEST_PRICE as keyof typeof Notification;
+//   }
+//   if (!scrapedProduct.isOutOfStock && currentProduct.isOutOfStock) {
+//     return Notification.CHANGE_OF_STOCK as keyof typeof Notification;
+//   }
+//   if (scrapedProduct.discountRate >= THRESHOLD_PERCENTAGE) {
+//     return Notification.THRESHOLD_MET as keyof typeof Notification;
+//   }
 
-  return null;
-};
+//   return null;
+// };
 
 export const formatNumber = (num: number = 0) => {
   return num.toLocaleString(undefined, {
