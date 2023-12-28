@@ -41,7 +41,7 @@ export async function scrapAndStoreProduct(productUrl: string) {
       { upsert: true, new: true }
     );
 
-    revalidatePath(`/products/${newProduct._id}`)
+    revalidatePath(`/products/${newProduct._id}`);
 
     // if we have a product, we can store it in the database
     // const product = {
@@ -51,6 +51,30 @@ export async function scrapAndStoreProduct(productUrl: string) {
     // return scrapedProduct;
   } catch (error: any) {
     // throw new Error("Failed to create/Update product");
+    console.log(error.message);
+  }
+}
+
+// fetch product based on id
+
+export async function getProductById(productId: string) {
+  try {
+    connectDb();
+    const product = await Product.findById(productId);
+    if (!product) return null;
+    return product;
+  } catch (error: any) {
+    console.log(error.message);
+  }
+}
+
+export async function getAllProducts() {
+  try {
+    connectDb();
+    const products = await Product.find();
+    if (!products) return null;
+    return products;
+  } catch (error: any) {
     console.log(error.message);
   }
 }
