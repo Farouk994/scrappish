@@ -2,13 +2,34 @@
 
 "use client";
 
-import React, { Fragment } from "react";
+import React, { FormEvent, Fragment } from "react";
 import { useState } from "react";
 import { Dialog, Transition } from "@headlessui/react";
 import Image from "next/image";
+import { addUserEmailToProduct } from "@/lib/actions";
 
-const Modal = () => {
+interface Props {
+    productId: string;
+}
+
+const Modal = ({productId}: Props) => {
   const [isOpen, setIsOpen] = useState(true);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [email, setEmail] = useState("");
+
+  const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    setIsSubmitting(true);
+
+    // addUserEmail
+    // await addUserEmail(productId, email);
+    await addUserEmailToProduct(productId, email);
+
+    setIsSubmitting(false);
+    setEmail("");
+    closeModal();
+  };
+
   const openModal = () => setIsOpen(true);
   const closeModal = () => setIsOpen(false);
 
@@ -72,7 +93,10 @@ const Modal = () => {
                   <p className='text-sm text-gray-600 mt-2'>
                     Never miss a bargain with out timely alerts!
                   </p>
-                  <form action='' className='flex flex-col mt-5'>
+                  <form
+                    action=''
+                    className='flex flex-col mt-5'
+                    onSubmit={handleSubmit}>
                     <label
                       htmlFor=''
                       className='text-sm font-medium text-gray-700'>
@@ -90,12 +114,14 @@ const Modal = () => {
                         required
                         type='email'
                         id='email'
+                        value={email}
+                        onChange={(e) => setEmail(e.target.value)}
                         className='dialog-input'
                         placeholder='Enter your email address'
                       />
                     </div>
                     <button className='dialog-btn' type='submit'>
-                      Track
+                      {isSubmitting ? "Submitting..." : "Track"}
                     </button>
                   </form>
                 </div>

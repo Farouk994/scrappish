@@ -42,8 +42,7 @@ const ProductDetails = async ({ params: { id } }: Props) => {
                 {product.title}
               </p>
               <Link
-                // :TODO: fix href/ DB returns null for url
-                href={"product.url"}
+                href={product.url}
                 target='_blank'
                 className='text-base text-black opacity-50'>
                 Visit Product
@@ -157,7 +156,7 @@ const ProductDetails = async ({ params: { id } }: Props) => {
               />
             </div>
           </div>
-          <Modal/>
+          <Modal productId={id}/>
         </div>
       </div>
         <div className='flex flex-col gap-16'>
