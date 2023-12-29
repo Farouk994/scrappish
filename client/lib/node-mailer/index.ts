@@ -65,7 +65,6 @@ export async function generateEmailBody(
 
     default:
       throw new Error("Invalid notification type");
-    //   break;
   }
   return { subject, body };
 };
