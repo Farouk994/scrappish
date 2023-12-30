@@ -20,10 +20,10 @@ export async function scrapAndStoreProduct(productUrl: string) {
 
     let product = scrapedProduct;
 
-    const existingProduct = await Product.findOne({ url: product.url });
+    const existingProduct = await Product.findOne({ url: scrapedProduct.url });
 
     if (existingProduct) {
-      const updatedPriceHistory = [
+      const updatedPriceHistory: any = [
         ...existingProduct.priceHistory,
         { price: scrapedProduct.currentPrice },
       ];
@@ -32,7 +32,7 @@ export async function scrapAndStoreProduct(productUrl: string) {
         ...scrapedProduct,
         priceHistory: updatedPriceHistory,
         lowestPrice: getLowestPrice(updatedPriceHistory),
-        getHighestPrice: getHighestPrice(updatedPriceHistory),
+        highestPrice: getHighestPrice(updatedPriceHistory),
         averagePrice: getAveragePrice(updatedPriceHistory),
       };
     }
